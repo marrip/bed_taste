@@ -35,6 +35,8 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: code-coverage-report
+      - name: Check where report is
+        run: ls -la
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
