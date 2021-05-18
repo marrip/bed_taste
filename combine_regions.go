@@ -1,8 +1,26 @@
 package main
 
 import(
+	"errors"
 	"fmt"
 )
+
+func (reg *Region) prepAndCombine(probe Region, pad int64) (err error) {
+	if !reg.chromosomeIndent(probe.Chr) {
+		err = errors.New(fmt.Sprintf("%v and %v are located on different chromosomes", reg, probe))
+		return
+	}
+	probe.addPadding(pad)
+	reg.combineRegions(probe)
+	return
+}
+
+func (reg *Region) chromosomeIndent(chr string) bool {
+	if reg.Chr == chr {
+		return true
+	}
+	return false
+}
 
 func (reg *Region) addPadding(pad int64) {
 	start := reg.Start - pad
@@ -21,23 +39,17 @@ func (reg *Region) addPadding(pad int64) {
 	}
 }
 
-func combineRegions(exon Region, probe Region) (result Region) {
-	result.Chr = exon.Chr
-	if exon.Start > probe.End || probe.Start > exon.End {
-		result = probe
-		fmt.Println(result)
+func (reg *Region) combineRegions(probe Region) {
+	if reg.Start > probe.End || probe.Start > reg.End {
+		reg.Start = probe.Start
+		reg.End = probe.End
 		return
 	}
-	if exon.Start > probe.Start {
-		result.Start = probe.Start
-	} else {
-		result.Start = exon.Start
+	if reg.Start > probe.Start {
+		reg.Start = probe.Start
 	}
-	if probe.End > exon.End {
-		result.End = probe.End
-	} else {
-		result.End = exon.End
+	if probe.End > reg.End {
+		reg.End = probe.End
 	}
-	fmt.Println(result)
 	return
 }
