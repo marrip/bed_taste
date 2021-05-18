@@ -18,3 +18,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -sonar.organization=marrip
+            -sonar.projectKey=marrip_bed_taste
+            -sonar.projectName=Bed Taste
+            -sonar.tests=.
+
