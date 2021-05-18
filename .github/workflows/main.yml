@@ -46,4 +46,4 @@ jobs:
             -Dsonar.organization=marrip
             -Dsonar.projectKey=marrip_bed_taste
             -Dsonar.projectName=Bed_Taste
-            -Dsonar.go.coverage.reportPaths=/github/workspace/cov.out
+            -Dsonar.go.coverage.reportPaths=./cov.out
