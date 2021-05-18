@@ -1,13 +1,13 @@
 package main
 
-import(
+import (
 	"errors"
 	"fmt"
 )
 
 func (reg *Region) prepAndCombine(probe Region, pad int64) (err error) {
 	if !reg.chromosomeIndent(probe.Chr) {
-		err = errors.New(fmt.Sprintf("%v and %v are located on different chromosomes", reg, probe))
+		err = errors.New(fmt.Sprintf("%s:%v-%v and %s:%v-%v are located on different chromosomes", reg.Chr, reg.Start, reg.End, probe.Chr, probe.Start, probe.End))
 		return
 	}
 	probe.addPadding(pad)
@@ -33,7 +33,7 @@ func (reg *Region) addPadding(pad int64) {
 	}
 	if end <= hg38[reg.Chr] {
 		reg.End = end
-	} else  {
+	} else {
 		fmt.Printf("[INFO] adding padding to chr%s:%v-%v results in value exceding the chromosome limit - end is set to %v\n", reg.Chr, reg.Start, reg.End, hg38[reg.Chr])
 		reg.End = hg38[reg.Chr]
 	}

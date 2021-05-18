@@ -1,23 +1,21 @@
 package main
 
-import(
+import (
 	"testing"
 
 	"github.com/go-test/deep"
 )
 
 func TestCheckFlag(t *testing.T) {
-	var cases = map[string]struct{
-		input string
+	var cases = map[string]struct {
+		input  string
 		output bool
 	}{
-		"Flag is set":
-		{
+		"Flag is set": {
 			"/path/to/cna/probes.list",
 			false,
 		},
-		"Flag is not set":
-		{
+		"Flag is not set": {
 			"",
 			true,
 		},

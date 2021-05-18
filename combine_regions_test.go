@@ -1,27 +1,26 @@
 package main
 
-import(
+import (
 	"testing"
 
 	"github.com/go-test/deep"
 )
 
-func checkError(t *testing.T, err error, exp bool){
+func checkError(t *testing.T, err error, exp bool) {
 	if (err != nil) != exp {
-		t.Errorf("Expectation and result are different. Error is %v", err) 
+		t.Errorf("Expectation and result are different. Error is\n%v", err)
 	}
 }
 
 func TestPrepAndCombine(t *testing.T) {
-	var cases = map[string]struct{
-		input Region
-		probe Region
-		pad int64
-		output Region
+	var cases = map[string]struct {
+		input   Region
+		probe   Region
+		pad     int64
+		output  Region
 		wantErr bool
 	}{
-		"Successful combination of probe and region":
-		{
+		"Successful combination of probe and region": {
 			Region{
 				"1",
 				100,
@@ -40,8 +39,7 @@ func TestPrepAndCombine(t *testing.T) {
 			},
 			false,
 		},
-		"Chromosomes of region and probe do not match":
-		{
+		"Chromosomes of region and probe do not match": {
 			Region{
 				"1",
 				100,
@@ -73,13 +71,12 @@ func TestPrepAndCombine(t *testing.T) {
 }
 
 func TestChromosomeIdent(t *testing.T) {
-	var cases = map[string]struct{
-		input Region
-		chr string
+	var cases = map[string]struct {
+		input  Region
+		chr    string
 		output bool
 	}{
-		"Chromosomes are identical":
-		{
+		"Chromosomes are identical": {
 			Region{
 				"1",
 				100,
@@ -88,8 +85,7 @@ func TestChromosomeIdent(t *testing.T) {
 			"1",
 			true,
 		},
-		"Chromosomes are not identical":
-		{
+		"Chromosomes are not identical": {
 			Region{
 				"1",
 				100,
@@ -110,13 +106,12 @@ func TestChromosomeIdent(t *testing.T) {
 }
 
 func TestAddPadding(t *testing.T) {
-	var cases = map[string]struct{
-		input Region
+	var cases = map[string]struct {
+		input   Region
 		padding int64
-		output Region
+		output  Region
 	}{
-		"successfully apply padding":
-		{
+		"successfully apply padding": {
 			Region{
 				"1",
 				100,
@@ -129,8 +124,7 @@ func TestAddPadding(t *testing.T) {
 				200,
 			},
 		},
-		"start falls under 0":
-		{
+		"start falls under 0": {
 			Region{
 				"1",
 				100,
@@ -143,8 +137,7 @@ func TestAddPadding(t *testing.T) {
 				300,
 			},
 		},
-			"end excedes Chromosome limit":
-		{
+		"end excedes Chromosome limit": {
 			Region{
 				"1",
 				248956022,
@@ -169,13 +162,12 @@ func TestAddPadding(t *testing.T) {
 }
 
 func TestCombineRegions(t *testing.T) {
-	var cases = map[string]struct{
-		input Region
-		probe Region
+	var cases = map[string]struct {
+		input  Region
+		probe  Region
 		output Region
 	}{
-		"Probe is completely covered by region":
-		{
+		"Probe is completely covered by region": {
 			Region{
 				"1",
 				100,
@@ -192,8 +184,7 @@ func TestCombineRegions(t *testing.T) {
 				150,
 			},
 		},
-		"Probe is completely outside and upstream of region":
-		{
+		"Probe is completely outside and upstream of region": {
 			Region{
 				"1",
 				100,
@@ -210,8 +201,7 @@ func TestCombineRegions(t *testing.T) {
 				80,
 			},
 		},
-		"Probe is completely outside and downstream of region":
-		{
+		"Probe is completely outside and downstream of region": {
 			Region{
 				"1",
 				100,
@@ -228,8 +218,7 @@ func TestCombineRegions(t *testing.T) {
 				280,
 			},
 		},
-		"Probe hangs upstream over region":
-		{
+		"Probe hangs upstream over region": {
 			Region{
 				"1",
 				100,
@@ -246,8 +235,7 @@ func TestCombineRegions(t *testing.T) {
 				150,
 			},
 		},
-		"Probe hangs downstream over region":
-		{
+		"Probe hangs downstream over region": {
 			Region{
 				"1",
 				100,
@@ -264,8 +252,7 @@ func TestCombineRegions(t *testing.T) {
 				160,
 			},
 		},
-		"Probe hangs on both sides over region":
-		{
+		"Probe hangs on both sides over region": {
 			Region{
 				"1",
 				145,
