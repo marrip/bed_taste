@@ -5,7 +5,7 @@ import(
 	"fmt"
 )
 
-func get_flags() {
+func getFlags() {
 	// Read flags
 	var cna, hg string
 	var padding int64
@@ -17,14 +17,14 @@ func get_flags() {
 	flag.Parse()
 
 	// Check if required flags exist
-	if check_flag(cna) {
+	if checkFlag(cna) {
 		flag.PrintDefaults()
 		fmt.Println("missing required flags")
 	}
 	return
 }
 
-func check_flag(flag string) bool {
+func checkFlag(flag string) bool {
 	if flag == "" {
 		return true
 	}
