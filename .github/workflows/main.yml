@@ -35,8 +35,6 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: code-coverage-report
-      - name: Check where report is
-        run: ls -la code-coverage-report
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -47,4 +45,4 @@ jobs:
             -Dsonar.organization=marrip
             -Dsonar.projectKey=marrip_bed_taste
             -Dsonar.projectName=Bed_Taste
-            -Dsonar.go.coverage.reportPaths=cov.out
+            -Dsonar.go.coverage.reportPaths=code-coverage-report/cov.out
