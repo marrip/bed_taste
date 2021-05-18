@@ -17,14 +17,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Test
-        run: go test ./...
+        run: make test
+      - name: Archive Code Coverage Report
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: bin
   sonarcloud:
     name: SonarCloud
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Download code coverage results
+        uses: actions/download-artifact@v1
+        with:
+          name: code-coverage-report
+          path: bin
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -35,5 +46,3 @@ jobs:
             -Dsonar.organization=marrip
             -Dsonar.projectKey=marrip_bed_taste
             -Dsonar.projectName=Bed_Taste
-            -Dsonar.tests=.
-
