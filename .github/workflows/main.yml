@@ -36,7 +36,7 @@ jobs:
         with:
           name: code-coverage-report
       - name: Check where report is
-        run: ls -la
+        run: ls -la code-coverage-report
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
