@@ -22,6 +22,6 @@ jobs:
           args: >
             -Dsonar.organization=marrip
             -Dsonar.projectKey=marrip_bed_taste
-            -Dsonar.projectName='Bed Taste'
+            -Dsonar.projectName=Bed_Taste
             -Dsonar.tests=.
 
