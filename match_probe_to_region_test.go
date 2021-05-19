@@ -22,7 +22,8 @@ func TestMatchProbeToRegion(t *testing.T) {
 	}{
 		"Successfully match probe to region": {
 			Session{
-				Padding: 50,
+				Hg:      "38",
+				Padding: 0,
 			},
 			map[string]RegionInfo{
 				"Gene1_1": {
@@ -68,8 +69,58 @@ func TestMatchProbeToRegion(t *testing.T) {
 			},
 			false,
 		},
+		"Probe has no matching region": {
+			Session{
+				Hg:      "38",
+				Padding: 0,
+			},
+			map[string]RegionInfo{
+				"Gene1_2": {
+					ID:      "Gene1_2",
+					Gene:    "Gene1",
+					GeneID:  "ENSG001",
+					TransID: "ENST001",
+					ExonID:  "2",
+					Region: Region{
+						Chr:   "1",
+						Start: 100,
+						End:   300,
+					},
+				},
+			},
+			[]RegionInfo{
+				{
+					ID:      "Gene1_1",
+					Gene:    "Gene1",
+					GeneID:  "ENSG001",
+					TransID: "ENST001",
+					ExonID:  "1",
+					Region: Region{
+						Chr:   "1",
+						Start: 200,
+						End:   220,
+					},
+				},
+			},
+			[]RegionInfo{
+				{
+					ID:      "Gene1_1",
+					Gene:    "Gene1",
+					GeneID:  "ENSG001",
+					TransID: "ENST001",
+					ExonID:  "1",
+					Region: Region{
+						Chr:   "1",
+						Start: 200,
+						End:   220,
+					},
+				},
+			},
+			false,
+		},
 		"Failing to match probe to region": {
 			Session{
+				Hg:      "38",
 				Padding: 50,
 			},
 			map[string]RegionInfo{
@@ -164,7 +215,7 @@ func TestPrepAndCombine(t *testing.T) {
 	}
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
-			err := c.input.prepAndCombine(c.probe, c.pad)
+			err := c.input.prepAndCombine(c.probe, c.pad, "38")
 			checkError(t, err, c.wantErr)
 			if diff := deep.Equal(c.input, c.output); diff != nil {
 				t.Error(diff)
@@ -256,7 +307,7 @@ func TestAddPadding(t *testing.T) {
 	}
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
-			c.input.addPadding(c.padding)
+			c.input.addPadding(c.padding, "38")
 			if diff := deep.Equal(c.input, c.output); diff != nil {
 				t.Error(diff)
 			}

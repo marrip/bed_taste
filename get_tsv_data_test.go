@@ -64,6 +64,64 @@ func TestGetTsvData(t *testing.T) {
 	}
 }
 
+func TestGetGenRegTsvData(t *testing.T) {
+	var cases = map[string]struct {
+		input   string
+		output  map[string]RegionInfo
+		wantErr bool
+	}{
+		"Successfully transfering data from file to struct": {
+			"test_data/exons.tsv",
+			map[string]RegionInfo{
+				"CDKN2B_1": {
+					ID:      "CDKN2B_1",
+					Gene:    "CDKN2B",
+					GeneID:  "ENSG00000147883",
+					TransID: "ENST00000380142",
+					ExonID:  "1",
+					Region: Region{
+						Chr:   "9",
+						Start: 22008675,
+						End:   22009272,
+					},
+				},
+				"CDKN2B_2": {
+					ID:      "CDKN2B_2",
+					Gene:    "CDKN2B",
+					GeneID:  "ENSG00000147883",
+					TransID: "ENST00000380142",
+					ExonID:  "2",
+					Region: Region{
+						Chr:   "9",
+						Start: 22004748,
+						End:   22006247,
+					},
+				},
+			},
+			false,
+		},
+		"File non-existent": {
+			"test_data/eksons.tsv",
+			nil,
+			true,
+		},
+		"Data format wrong": {
+			"test_data/exons_err.tsv",
+			map[string]RegionInfo{},
+			true,
+		},
+	}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			result, err := getGenRegTsvData(c.input)
+			checkError(t, err, c.wantErr)
+			if diff := deep.Equal(result, c.output); diff != nil {
+				t.Error(diff)
+			}
+		})
+	}
+}
+
 func TestReadTsv(t *testing.T) {
 	var cases = map[string]struct {
 		input   string
@@ -168,50 +226,6 @@ func TestAddDataToRegionInfo(t *testing.T) {
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
 			result, err := addDataToRegionInfo(c.input)
-			checkError(t, err, c.wantErr)
-			if diff := deep.Equal(result, c.output); diff != nil {
-				t.Error(diff)
-			}
-		})
-	}
-}
-
-func TestAddDataToRegion(t *testing.T) {
-	var cases = map[string]struct {
-		input   []string
-		output  Region
-		wantErr bool
-	}{
-		"Successfully add data to region": {
-			[]string{
-				"9",
-				"22008675",
-				"22009272",
-			},
-			Region{
-				Chr:   "9",
-				Start: 22008675,
-				End:   22009272,
-			},
-			false,
-		},
-		"Failing at adding data to region": {
-			[]string{
-				"9",
-				"one",
-				"two",
-			},
-			Region{
-				Chr:   "9",
-				Start: 0,
-				End:   0,
-			},
-			true,
-		},
-	}
-	for name, c := range cases {
-		t.Run(name, func(t *testing.T) {
-			result, err := addDataToRegion(c.input)
 			checkError(t, err, c.wantErr)
 			if diff := deep.Equal(result, c.output); diff != nil {
 				t.Error(diff)
@@ -373,6 +387,91 @@ func TestIsInt(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			err := isInt(c.input)
 			checkError(t, err, c.wantErr)
+		})
+	}
+}
+
+func TestAddDataToRegion(t *testing.T) {
+	var cases = map[string]struct {
+		input   []string
+		output  Region
+		wantErr bool
+	}{
+		"Successfully add data to region": {
+			[]string{
+				"9",
+				"22008675",
+				"22009272",
+			},
+			Region{
+				Chr:   "9",
+				Start: 22008675,
+				End:   22009272,
+			},
+			false,
+		},
+		"Failing at adding data to region": {
+			[]string{
+				"9",
+				"one",
+				"two",
+			},
+			Region{
+				Chr:   "9",
+				Start: 0,
+				End:   0,
+			},
+			true,
+		},
+		"Switching start and end": {
+			[]string{
+				"9",
+				"22009272",
+				"22008675",
+			},
+			Region{
+				Chr:   "9",
+				Start: 22008675,
+				End:   22009272,
+			},
+			false,
+		},
+	}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			result, err := addDataToRegion(c.input)
+			checkError(t, err, c.wantErr)
+			if diff := deep.Equal(result, c.output); diff != nil {
+				t.Error(diff)
+			}
+		})
+	}
+}
+
+func TestSwitchStartEnd(t *testing.T) {
+	var cases = map[string]struct {
+		input  Region
+		output Region
+	}{
+		"Switch start and end point": {
+			Region{
+				Chr:   "9",
+				Start: 22008675,
+				End:   22009272,
+			},
+			Region{
+				Chr:   "9",
+				Start: 22009272,
+				End:   22008675,
+			},
+		},
+	}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			c.input.switchStartEnd()
+			if diff := deep.Equal(c.input, c.output); diff != nil {
+				t.Error(diff)
+			}
 		})
 	}
 }
