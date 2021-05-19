@@ -10,10 +10,21 @@ import (
 	"github.com/pkg/errors"
 )
 
-//func (s *Session) getTsvData() {
-//
-//	return
-//}
+func getTsvData(path string) (regioninfos []RegionInfo, err error) {
+	data, err := readTsv(path)
+	if err != nil {
+		return
+	}
+	for _, row := range data {
+		var regioninfo RegionInfo
+		regioninfo, err = addDataToRegionInfo(row)
+		if err != nil {
+			return
+		}
+		regioninfos = append(regioninfos, regioninfo)
+	}
+	return
+}
 
 func readTsv(path string) (data [][]string, err error) {
 	file, err := os.Open(path)
