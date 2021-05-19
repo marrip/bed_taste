@@ -26,6 +26,23 @@ func getTsvData(path string) (regioninfos []RegionInfo, err error) {
 	return
 }
 
+func getGenRegTsvData(path string) (regioninfos map[string]RegionInfo, err error) {
+	data, err := readTsv(path)
+	if err != nil {
+		return
+	}
+	regioninfos = make(map[string]RegionInfo)
+	for _, row := range data {
+		var regioninfo RegionInfo
+		regioninfo, err = addDataToRegionInfo(row)
+		if err != nil {
+			return
+		}
+		regioninfos[regioninfo.ID] = regioninfo
+	}
+	return
+}
+
 func readTsv(path string) (data [][]string, err error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -60,21 +77,6 @@ func addDataToRegionInfo(data []string) (regioninfo RegionInfo, err error) {
 		TransID: data[1],
 		ExonID:  data[3],
 		Region:  region,
-	}
-	return
-}
-
-func addDataToRegion(data []string) (region Region, err error) {
-	region.Chr = data[0]
-	region.Start, err = strconv.ParseInt(data[1], 10, 64)
-	if err != nil {
-		err = errors.WithStack(err)
-		return
-	}
-	region.End, err = strconv.ParseInt(data[2], 10, 64)
-	if err != nil {
-		err = errors.WithStack(err)
-		return
 	}
 	return
 }
@@ -130,4 +132,29 @@ func isInt(data []string) (err error) {
 		}
 	}
 	return
+}
+
+func addDataToRegion(data []string) (region Region, err error) {
+	region.Chr = data[0]
+	region.Start, err = strconv.ParseInt(data[1], 10, 64)
+	if err != nil {
+		err = errors.WithStack(err)
+		return
+	}
+	region.End, err = strconv.ParseInt(data[2], 10, 64)
+	if err != nil {
+		err = errors.WithStack(err)
+		return
+	}
+	if region.Start > region.End {
+		region.switchStartEnd()
+	}
+	return
+}
+
+func (region *Region) switchStartEnd() {
+	start := region.Start
+	region.Start = region.End
+	region.End = start
+	fmt.Printf("[INFO] corrected region %s:%v-%v\n", region.Chr, region.Start, region.End)
 }
