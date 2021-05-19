@@ -55,12 +55,12 @@ func addDataToRegionInfo(data []string) (regioninfo RegionInfo, err error) {
 
 func addDataToRegion(data []string) (region Region, err error) {
 	region.Chr = data[0]
-	region.Start, err = strconv.ParseInt(data[1], 16, 64)
+	region.Start, err = strconv.ParseInt(data[1], 10, 64)
 	if err != nil {
 		err = errors.WithStack(err)
 		return
 	}
-	region.End, err = strconv.ParseInt(data[2], 16, 64)
+	region.End, err = strconv.ParseInt(data[2], 10, 64)
 	if err != nil {
 		err = errors.WithStack(err)
 		return
