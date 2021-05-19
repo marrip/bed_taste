@@ -6,6 +6,64 @@ import (
 	"github.com/go-test/deep"
 )
 
+func TestGetTsvData(t *testing.T) {
+	var cases = map[string]struct {
+		input   string
+		output  []RegionInfo
+		wantErr bool
+	}{
+		"Successfully transfering data from file to struct": {
+			"test_data/exons.tsv",
+			[]RegionInfo{
+				{
+					ID:      "CDKN2B_1",
+					Gene:    "CDKN2B",
+					GeneID:  "ENSG00000147883",
+					TransID: "ENST00000380142",
+					ExonID:  "1",
+					Region: Region{
+						Chr:   "9",
+						Start: 22008675,
+						End:   22009272,
+					},
+				},
+				{
+					ID:      "CDKN2B_2",
+					Gene:    "CDKN2B",
+					GeneID:  "ENSG00000147883",
+					TransID: "ENST00000380142",
+					ExonID:  "2",
+					Region: Region{
+						Chr:   "9",
+						Start: 22004748,
+						End:   22006247,
+					},
+				},
+			},
+			false,
+		},
+		"File non-existent": {
+			"test_data/eksons.tsv",
+			nil,
+			true,
+		},
+		"Data format wrong": {
+			"test_data/exons_err.tsv",
+			nil,
+			true,
+		},
+	}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			result, err := getTsvData(c.input)
+			checkError(t, err, c.wantErr)
+			if diff := deep.Equal(result, c.output); diff != nil {
+				t.Error(diff)
+			}
+		})
+	}
+}
+
 func TestReadTsv(t *testing.T) {
 	var cases = map[string]struct {
 		input   string
