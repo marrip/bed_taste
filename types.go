@@ -1,9 +1,10 @@
 package main
 
 type Session struct {
+	Hg         string
 	Padding    int64
-	PathCna    string
 	PathProbes string
+	PathGenReg string
 }
 
 type RegionInfo struct {
