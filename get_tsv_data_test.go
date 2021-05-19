@@ -104,7 +104,7 @@ func TestAddDataToRegionInfo(t *testing.T) {
 					End:   0,
 				},
 			},
-			false,
+			true,
 		},
 	}
 	for name, c := range cases {
