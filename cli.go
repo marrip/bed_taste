@@ -1,27 +1,27 @@
 package main
 
-import(
+import (
 	"flag"
 	"fmt"
+
+	"github.com/pkg/errors"
 )
 
-func getFlags() {
-	// Read flags
-	var cna, hg string
-	var padding int64
-	flag.StringVar(&cna, "cna", "", "path to file containing MLPA probes")
-	flag.StringVar(&hg, "hg", "38", "version of human genome")
-	flag.Int64Var(&padding, "padding", 250, "padding that should be applied to MLPA probe regions")
-
-	// Parse flags
+func (s *Session) getFlags() error {
+	flag.StringVar(&s.PathProbes, "probe", "", "path to file containing MLPA probes (required)")
+	flag.StringVar(&s.PathGenReg, "genreg", "", "path to file containing genetic regions (required)")
+	flag.StringVar(&s.Hg, "hg", "38", "version of human genome")
+	flag.Int64Var(&s.Padding, "padding", 250, "padding that should be applied to MLPA probe regions")
 	flag.Parse()
 
-	// Check if required flags exist
-	if checkFlag(cna) {
+	if checkFlag(s.PathProbes) || checkFlag(s.PathGenReg) {
 		flag.PrintDefaults()
-		fmt.Println("missing required flags")
+		return errors.New("missing required flags")
 	}
-	return
+	if err := s.checkHg(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func checkFlag(flag string) bool {
@@ -29,4 +29,12 @@ func checkFlag(flag string) bool {
 		return true
 	}
 	return false
+}
+
+func (s *Session) checkHg() (err error) {
+	if hg[s.Hg] == nil {
+		err = errors.New(fmt.Sprintf("Version %s of the human genome is not available", s.Hg))
+		return
+	}
+	return
 }
