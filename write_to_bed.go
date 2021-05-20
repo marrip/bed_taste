@@ -31,7 +31,7 @@ func prepBedData(data []RegionInfo) (prepped [][]string) {
 				region.Region.Chr,
 				fmt.Sprintf("%v", region.Region.Start),
 				fmt.Sprintf("%v", region.Region.End),
-				fmt.Sprintf("%s_%s,%s/%s", region.Gene, region.ExonID, region.GeneID, region.TransID),
+				fmt.Sprintf("%s,%s/%s", region.ID, region.GeneID, region.TransID),
 			})
 	}
 	return
