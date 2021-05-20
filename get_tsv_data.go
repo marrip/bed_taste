@@ -98,7 +98,7 @@ func checkRow(data []string) (err error) {
 		err = errors.New(fmt.Sprintf("required fields of row %v appear to be empty", data))
 		return
 	}
-	err = isInt(data[3:])
+	err = isInt(data[5:])
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("field in %v is not a convertable number", data))
 		return
