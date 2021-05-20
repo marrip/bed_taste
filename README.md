@@ -46,5 +46,8 @@ Flag | Required | Default | Definition
 Run it like so:
 
 ```bash
-docker run -it --rm bed_taste:latest -genreg path/to/genreg.tsv -probe path/to/probes.tsv
+docker run -it --rm bed_taste:latest bed_taste -genreg path/to/genreg.tsv -probe path/to/probes.tsv
 ```
+
+Please keep in mind that the appropriate volume should be mounted into the container
+and the paths need to be adapted.
