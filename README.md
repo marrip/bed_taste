@@ -2,7 +2,7 @@
 
 Simple CLI to combine probes and genetic regions into `.bed` file
 
-![Complete Build](https://github.com/marrip/bed_taste/actions/workflows/main.yaml/badge.svg)
+![Test and Build](https://github.com/marrip/bed_taste/actions/workflows/main.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## :speech_balloon: Introduction
