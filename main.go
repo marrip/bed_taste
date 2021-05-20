@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -15,7 +14,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
-	fmt.Println(data)
+	err = s.write2Bed(data)
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
 }
 
 func (s Session) data2CombinedRegions() (completed []RegionInfo, err error) {

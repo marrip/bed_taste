@@ -10,6 +10,7 @@ import (
 func (s *Session) getFlags() error {
 	flag.StringVar(&s.PathProbes, "probe", "", "path to file containing MLPA probes (required)")
 	flag.StringVar(&s.PathGenReg, "genreg", "", "path to file containing genetic regions (required)")
+	flag.StringVar(&s.Output, "out", "out.bed", "path to output file to be generated")
 	flag.StringVar(&s.Hg, "hg", "38", "version of human genome")
 	flag.Int64Var(&s.Padding, "padding", 250, "padding that should be applied to MLPA probe regions")
 	flag.Parse()

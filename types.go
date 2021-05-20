@@ -5,6 +5,7 @@ type Session struct {
 	Padding    int64
 	PathProbes string
 	PathGenReg string
+	Output     string
 }
 
 type RegionInfo struct {
