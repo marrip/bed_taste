@@ -29,7 +29,7 @@ Input `.tsv` files need to be formatted like so:
 ```
 
 `test_data/exons.tsv` may serve as an example. If `ENSEMBL` IDs are not available
-these may be omittedi leaving field 1 and 2 empty. 
+these may be omitted leaving field 1 and 2 empty. 
 
 ## :rocket: Usage
 
